@@ -19,7 +19,7 @@ async function main () {
       password: process.env.DB_PASS || 'applicationuser',
       database: process.env.DB_NAME || 'movie_db'
     })
-    pool.query = util.promisify(pool.query)
+    //pool.query = util.promisify(pool.query)
 
     const publicationsQuery = 'INSERT INTO publications (name, avatar) VALUES ?'
     const publicationsValues = [
