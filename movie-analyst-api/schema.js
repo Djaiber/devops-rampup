@@ -1,7 +1,7 @@
 // schema.js
 // Script to create the database schema
 // include dotenv to load environment variables
-import dotenv from 'dotenv'; // <-- FIX: Use import
+import dotenv from 'dotenv'; // <-- FIX: Use import new syntax ES Modules
 dotenv.config(); // Still call config() after importing
 
 // Updated to use mysql2/promise for async/await support
