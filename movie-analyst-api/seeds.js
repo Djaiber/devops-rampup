@@ -1,5 +1,14 @@
-const mysql = require('mysql')
-const util = require('util')
+// seeds.js
+// Script to seed the database with initial data
+// include dotenv to load environment variables
+
+import dotenv from 'dotenv';//update to use import syntax
+dotenv.config(); // Still call config() after importing
+
+// Updated to use mysql2/promise for async/await support
+import mysql from 'mysql2/promise';
+//const util = require('util') Legacy mode
+
 
 async function main () {
   try {
