@@ -1,16 +1,24 @@
 // Get our dependencies
+import dotenv from 'dotenv';
+dotenv.config(); // Still call config() after importing
+import express from 'express';
+import mysql from 'mysql2/promise';
+const app = express();
+/* legacy module syntax
+require('dotenv').config();
 const express = require('express')
 const app = express()
 const mysql = require('mysql')
 const util = require('util')
-
+*/
 const pool = mysql.createPool({
   host: process.env.DB_HOST || 'localhost',
   user: process.env.DB_USER || 'applicationuser',
   password: process.env.DB_PASS || 'applicationuser',
   database: process.env.DB_NAME || 'movie_db'
+
 })
-pool.query = util.promisify(pool.query)
+//pool.query = util.promisify(pool.query)
 
 // Implement the movies API endpoint
 app.get('/movies', async function (req, res) {
@@ -22,7 +30,7 @@ app.get('/movies', async function (req, res) {
     res.json(rows)
   } catch (err) {
     console.error('API Error:', err)
-    res.staus(500).send({'msg': 'Internal server error'})
+    res.status(500).send({'msg': 'Internal server error'})
   }
 })
 
@@ -32,7 +40,7 @@ app.get('/reviewers', async function (req, res) {
     res.json(rows)
   } catch (err) {
     console.error('API Error:', err)
-    res.staus(500).send({'msg': 'Internal server error'})
+    res.status(500).send({'msg': 'Internal server error'})
   }
 })
 
@@ -42,7 +50,7 @@ app.get('/publications', async function (req, res) {
     res.json(rows)
   } catch (err) {
     console.error('API Error:', err)
-    res.staus(500).send({'msg': 'Internal server error'})
+    res.status(500).send({'msg': 'Internal server error'})
   }
 })
 
@@ -56,14 +64,30 @@ app.get('/pending', async function (req, res) {
     res.json(rows)
   } catch (err) {
     console.error('API Error:', err)
-    res.staus(500).send({'msg': 'Internal server error'})
+    res.status(500).send({'msg': 'Internal server error'})
   }
 })
+
 
 app.get('/', function (req, res) {
   res.status(200).send({'service_status': 'Up'})
 })
 
-console.log('server listening through port: ' + process.env.PORT)
+/* Start the server only if not in test mode (Wrapper to allow testing)
+if (process.env.NODE_ENV !== 'test') {
+  const PORT = process.env.PORT || 3000   
+  app.listen(PORT, () => {
+    console.log('Server is running on port: ' + PORT)
+  })
+}*/
+
+
+//change test mode to export app without listening
+console.log('server listening through port: ' + (process.env.PORT || 3000))
 app.listen(process.env.PORT || 3000)
-module.exports = app
+
+//legacy module export syntax
+//module.exports = app
+
+// ES Module export syntax
+export default app
