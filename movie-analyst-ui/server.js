@@ -1,9 +1,21 @@
+// Load environment variables from .env file
+import dotenv from 'dotenv'; 
+dotenv.config(); 
 // Declare our dependencies
-var express = require('express');
-var request = require('superagent');
+import express from 'express';
+import request from 'superagent';
+//var express = require('express'); legacy mode 
+//var request = require('superagent'); legacy mode
+
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+// __dirname is not available in ES modules, so we need to create it
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // Create our express app
-var app = express();
+const app = express();
 
 // Set the view engine to use EJS as well as set the default views directory
 app.set('view engine', 'ejs');
@@ -12,7 +24,7 @@ app.set('views', __dirname + '/public/views/');
 // This tells Express out of which directory to serve static assets like CSS and images
 app.use(express.static(__dirname + '/public'));
 
-let backend_url = process.env.BACKEND_URL || "localhost:3000"
+let backend_url = process.env.BACKEND_URL || "http://localhost:3000"
 
 // The homepage route of our application does not interface with the MovieAnalyst API and is always accessible. We won’t use the getAccessToken middleware here. We’ll simply render the index.ejs view.
 app.get('/', function(req, res){
@@ -23,12 +35,12 @@ app.get('/', function(req, res){
 // Once the request is sent out, our API will validate that the access_token has the right scope to request the /movies resource and if it does, will return the movie data. We’ll take this movie data, and pass it alongside our movies.ejs template for rendering
 app.get('/movies', function(req, res){
   request
-    .get(`http://${backend_url}/movies`)
+    .get(`${backend_url}/movies`)
     .end(function(err, data) {
-      if(data.status == 403){
-        res.send(403, '403 Forbidden');
+      if(err || data.status == 403){
+        res.status(403).send('403 Forbidden');
       } else {
-        var movies = data.body;
+        const movies = data.body;
         res.render('movies', { movies: movies} );
       }
     })
@@ -36,15 +48,15 @@ app.get('/movies', function(req, res){
 
 // The process will be the same for the remaining routes. We’ll make sure to get the acess_token first and then make the request to our API to get the data.
 // The key difference on the authors route, is that for our client, we’re naming the route /authors, but our API endpoint is /reviewers. Our route on the client does not have to match the API endpoint route.
-app.get('/authors', function(req, res){
+app.get('/authors', function(req, res){// ← Frontend route is /authors
   request
-    .get(`http://${backend_url}/reviewers`)
-    .set('Authorization', 'Bearer ' + req.access_token)
+    .get(`${backend_url}/reviewers`) // ← Backend endpoint is /reviewers
+    //.set('Authorization', 'Bearer ' + req.access_token)
     .end(function(err, data) {
-      if(data.status == 403){
-        res.send(403, '403 Forbidden');
+      if(err || data.status == 403){
+        res.status(403).send('403 Forbidden');
       } else {
-        var authors = data.body;
+        const authors = data.body;
         res.render('authors', {authors : authors});
       }
     })
@@ -52,12 +64,12 @@ app.get('/authors', function(req, res){
 
 app.get('/publications', function(req, res){
   request
-    .get(`http://${backend_url}/publications`)
+    .get(`${backend_url}/publications`)
     .end(function(err, data) {
-      if(data.status == 403){
-        res.send(403, '403 Forbidden');
+      if(err ||data.status == 403){
+        res.status(403).send('403 Forbidden');
       } else {
-        var publications = data.body;
+        const publications = data.body;
         res.render('publications', {publications : publications});
       }
     })
@@ -66,10 +78,10 @@ app.get('/publications', function(req, res){
 // We’ve added the pending route, but calling this route from the MovieAnalyst Website will always result in a 403 Forbidden error as this client does not have the admin scope required to get the data.
 app.get('/pending', function(req, res){
   request
-    .get(`http://${backend_url}/pending`)
+    .get(`${backend_url}/pending`)
     .end(function(err, data) {
-      if(data.status == 403){
-        res.send(403, '403 Forbidden');
+      if(err || data.status == 403){
+        res.status(403).send('403 Forbidden');
       }
     })
 })
