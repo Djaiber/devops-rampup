@@ -23,7 +23,7 @@ const pool = mysql.createPool({
 // Implement the movies API endpoint
 app.get('/movies', async function (req, res) {
   try {
-    const rows = await pool.query(
+    const [rows] = await pool.query(//only ROWS needed from result (mysql2/promise returns [rows, fields])
       'select m.title, m.release_year, m.score, r.name as reviewer, p.name as publication from movies m,' +
       'reviewers r, publications p where r.publication=p.name and m.reviewer=r.name'
     )
@@ -36,7 +36,7 @@ app.get('/movies', async function (req, res) {
 
 app.get('/reviewers', async function (req, res) {
   try {
-    const rows = await pool.query('select r.name, r.publication, r.avatar from reviewers r')
+    const [rows]= await pool.query('select r.name, r.publication, r.avatar from reviewers r')
     res.json(rows)
   } catch (err) {
     console.error('API Error:', err)
@@ -46,7 +46,7 @@ app.get('/reviewers', async function (req, res) {
 
 app.get('/publications', async function (req, res) {
   try {
-    const rows = await pool.query('select r.name, r.publication, r.avatar from reviewers r')
+    const [rows] = await pool.query('select p.name, p.avatar from publications p')//Update publications table
     res.json(rows)
   } catch (err) {
     console.error('API Error:', err)
@@ -57,7 +57,7 @@ app.get('/publications', async function (req, res) {
 app.get('/pending', async function (req, res) {
   try {
     //Update release_year and WHERE move to next line for readability
-    const rows = await pool.query(
+    const [rows] = await pool.query(
       'select m.title, m.release_year, m.score, r.name as reviewer, p.name as publication ' +
       'from movies m, reviewers r, publications p ' +
       'where m.reviewer=r.name and m.publication=p.name and m.release_year>=2017'
@@ -74,21 +74,21 @@ app.get('/', function (req, res) {
   res.status(200).send({'service_status': 'Up'})
 })
 
-/* Start the server only if not in test mode (Wrapper to allow testing)
+// Start the server only if not in test mode (Wrapper to allow testing)
 if (process.env.NODE_ENV !== 'test') {
-  const PORT = process.env.PORT || 3000   
+  const PORT = process.env.PORT || 3000;  
   app.listen(PORT, () => {
-    console.log('Server is running on port: ' + PORT)
-  })
-}*/
+    console.log('Server is running on port: ' + PORT);
+  });
+}
 
 
-//change test mode to export app without listening
+/*change test mode to export app without listening
 console.log('server listening through port: ' + (process.env.PORT || 3000))
-app.listen(process.env.PORT || 3000)
+app.listen(process.env.PORT || 3000)*/
 
 //legacy module export syntax
 //module.exports = app
 
 // ES Module export syntax
-export default app
+export default app;
