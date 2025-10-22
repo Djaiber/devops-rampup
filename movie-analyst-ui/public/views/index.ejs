@@ -1,9 +1,12 @@
 <!doctype html>
 <html>
 <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movie Analyst</title>
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-  <script src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script> <!-- Updated jQuery to use HTTPS -->
   <style>
     body {
       background-color: #ecedec;
@@ -19,38 +22,39 @@
   </div>
 
   <div class="row">
+    <!-- Latest Reviews Panel -->
     <div class="col-sm-4">
-      <div class="panel">
+      <div class="panel panel-default"> <!-- Added panel-default class for styling -->
         <div class="panel-heading">
-          <h3 class="panel-title">Latest Reviews</h3>
+          <h3 class="panel-title">Our Movies</h3>
         </div>
         <div class="panel-body text-center">
           <h1><span class="glyphicon glyphicon-bullhorn"></span></h1>
         </div>
         <div class="panel-footer small">
-          <a href="/movies" class="btn btn-block btn-primary">View Latest Reviews</a>
+          <a href="/movies" class="btn btn-block btn-primary">View Latest Movies</a>
         </div>
       </div>
     </div>
-
+<!-- Authors Panel -->
     <div class="col-sm-4">
-      <div class="panel">
+      <div class="panel panel-default"> <!-- Added panel-default class for styling -->
         <div class="panel-heading">
-          <h3 class="panel-title">View Latest Reviews</h3>
+          <h3 class="panel-title">Our Reviewers</h3>
         </div>
         <div class="panel-body text-center">
           <h1><span class="glyphicon glyphicon-user"></span></h1>
         </div>
         <div class="panel-footer small">
-          <a href="/authors" class="btn btn-block btn-primary">View Authors</a>
+          <a href="/authors" class="btn btn-block btn-primary">View Reviewers</a><!-- Change authors link by reviewers -->
         </div>
       </div>
     </div>
-
+<!-- Publications Panel -->
     <div class="col-sm-4">
-      <div class="panel">
+      <div class="panel panel-default"> <!-- Added panel-default class for styling -->
         <div class="panel-heading">
-          <h3 class="panel-title">Our Partners</h3>
+          <h3 class="panel-title">Our Publications</h3>
         </div>
         <div class="panel-body text-center">
           <h1><span class="glyphicon glyphicon-tower"></span></h1>
