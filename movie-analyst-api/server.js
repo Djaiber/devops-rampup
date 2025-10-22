@@ -56,10 +56,11 @@ app.get('/publications', async function (req, res) {
 
 app.get('/pending', async function (req, res) {
   try {
+    //Update release_year and WHERE move to next line for readability
     const rows = await pool.query(
-      'select m.title, m.release, m.score, r.name as reviewer, p.name as publication' +
-      'from movie_db.movies m, movie_db.reviewers r, movie_db.publications p where' +
-      'r.publication=p.name and m.reviewer=r.name and m.release>=2017'
+      'select m.title, m.release_year, m.score, r.name as reviewer, p.name as publication ' +
+      'from movies m, reviewers r, publications p ' +
+      'where m.reviewer=r.name and m.publication=p.name and m.release_year>=2017'
     )
     res.json(rows)
   } catch (err) {
